@@ -1,0 +1,18 @@
+{
+  "name": "cmd-plus",
+  "version": "1.0.0",
+  "description": "Cmd+ API - Extensible command line tool",
+  "main": "index.js",
+  "bin": {
+    "c": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "compressing": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
