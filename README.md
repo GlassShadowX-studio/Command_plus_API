@@ -2,7 +2,7 @@
 
 # Command+ API
 
-> **v1.0.0 | Turn your terminal into an extensible developer toolbox / 把你的终端变成可扩展的开发工具箱**
+> **v1.0.2 | Turn your terminal into an extensible developer toolbox / 把你的终端变成可扩展的开发工具箱**
 
 > [!WARNING]
 > **插件与主程序运行在同一个 Node.js 进程中。** 虽然 `ctx` 对象提供了上下文隔离，但它并非严格的安全沙箱。加载不可信的第三方插件可能存在安全风险（如任意代码执行）。请仅安装来自可信来源的插件，除非你确保此插件安全。<br />
