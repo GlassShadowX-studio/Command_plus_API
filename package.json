@@ -1,6 +1,6 @@
 {
   "name": "Command_plus_API",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Command+ API - Extensible cross-platform CLI tool",
   "main": "index.js",
   "bin": {

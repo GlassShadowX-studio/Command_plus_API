@@ -6,7 +6,7 @@ const os = require('os');
 // ==========================================
 // 全局统一版本号 (修改此处即可更新全软件版本)
 // ==========================================
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 const state = { lang: 'en' };
 const CONFIG_DIR = path.join(os.homedir(), '.cmdplus');

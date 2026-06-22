@@ -2,7 +2,7 @@
 
 # Command+ API
 
-> **v1.0.2 | Turn your terminal into an extensible developer toolbox / 把你的终端变成可扩展的开发工具箱**
+> **v1.0.3 | Turn your terminal into an extensible developer toolbox / 把你的终端变成可扩展的开发工具箱**
 
 > [!WARNING]
 > **插件与主程序运行在同一个 Node.js 进程中。** 虽然 `ctx` 对象提供了上下文隔离，但它并非严格的安全沙箱。加载不可信的第三方插件可能存在安全风险（如任意代码执行）。请仅安装来自可信来源的插件，除非你确保此插件安全。<br />
@@ -16,7 +16,6 @@
 
 This document is available in multiple languages. <br />You can select a language and switch between them.
 
-
 | [🇺🇸 English](#english) | [🇨🇳 简体中文](#简体中文) |
 
 ---
@@ -27,7 +26,7 @@ This document is available in multiple languages. <br />You can select a languag
 
 ### What is it?
 
-Command+ API is a cross-platform CLI framework that turns your terminal into an extensible toolbox. It comes with a plugin system—install packages to add commands, or write your own in minutes.
+Command+ API is a cross-platform CLI framework that turns your terminal into an extensible toolbox. It comes with a plugin system—install packages to add commands, or write your own in minutes. Looking at:[Command+ API Plugins Marketplace](https://commandapi.pages.dev/)
 
 ### Why use it?
 
@@ -94,23 +93,36 @@ setx PATH "%PATH%;C:\Program Files (x86)\command+ API"
 **Linux / macOS:**
 
 ```bash
-# Create a directory (e.g., ~/tools/cmd-plus)
+# Step 1: Create a directory (e.g., ~/tools/cmd-plus)
 mkdir -p ~/tools/cmd-plus
 
-# Copy files
+# Step 2: Copy files (assuming you're in the extracted/compiled directory)
 cp c ~/tools/cmd-plus/
 cp -r lib ~/tools/cmd-plus/
 
-# Add to PATH (Temporary)
+# Step 3: Make the executable file have execute permissions (Important!)
+chmod +x ~/tools/cmd-plus/c
+
+# Step 4: Add to PATH (Temporary - for current session only)
 export PATH="$PATH:~/tools/cmd-plus"
 
-# Add to PATH (Permanent) - Add the following line to ~/.bashrc or ~/.zshrc
-echo 'export PATH="$PATH:~/tools/cmd-plus"' >> ~/.bashrc
+# Step 5: Add to PATH (Permanent) - Add the following line to ~/.bashrc or ~/.zshrc
+echo 'export PATH="$PATH:/home/$USER/tools/cmd-plus"' >> ~/.bashrc
+
+# Step 6: Reload shell configuration
+source ~/.bashrc
+
 ```
 
 ### Verify Installation
 
 ```bash
+# Check if the path is correctly set
+echo $PATH
+
+# Verify the file exists and has execute permissions
+ls -la ~/tools/cmd-plus/c
+
 c --help
 ```
 
@@ -161,7 +173,7 @@ MIT
 
 ### 这是什么？
 
-Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。
+Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。扩展插件市场:[Command+ API Plugins Marketplace](https://commandapi.pages.dev/)
 
 ### 为什么用它？
 
@@ -228,23 +240,38 @@ setx PATH "%PATH%;C:\Program Files (x86)\command+ API"
 **Linux / macOS：**
 
 ```bash
-# 创建目录（例如 ~/tools/cmd-plus）
+# 第1步：创建目录（例如 ~/tools/cmd-plus）
 mkdir -p ~/tools/cmd-plus
 
-# 复制文件
+# 第2步：复制文件（假设你在解压或编译后的目录中）
 cp c ~/tools/cmd-plus/
 cp -r lib ~/tools/cmd-plus/
 
-# 添加到 PATH（临时生效）
+# 第3步：赋予可执行权限（重要！）
+chmod +x ~/tools/cmd-plus/c
+
+# 第4步：添加到 PATH（临时生效 - 仅当前会话）
 export PATH="$PATH:~/tools/cmd-plus"
 
-# 添加到 PATH（永久生效）- 将下面这行加入 ~/.bashrc 或 ~/.zshrc
-echo 'export PATH="$PATH:~/tools/cmd-plus"' >> ~/.bashrc
+# 第5步：添加到 PATH（永久生效）- 将下面这行加入 ~/.bashrc 或 ~/.zshrc
+echo 'export PATH="$PATH:/home/$USER/tools/cmd-plus"' >> ~/.bashrc
+
+# 第6步：重新加载配置
+source ~/.bashrc
+
+
 ```
 
 ### 验证安装：
 
 ```bash
+
+# 检查路径是否正确设置
+echo $PATH
+
+# 验证文件是否存在且具有可执行权限
+ls -la ~/tools/cmd-plus/c
+
 c --help
 ```
 
