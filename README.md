@@ -26,7 +26,7 @@ This document is available in multiple languages. <br />You can select a languag
 
 ### What is it?
 
-Command+ API is a cross-platform CLI framework that turns your terminal into an extensible toolbox. It comes with a plugin system—install packages to add commands, or write your own in minutes. Looking at:[Command+ API Plugins Marketplace](https://commandapi.pages.dev/)
+Command+ API is a cross-platform CLI framework that turns your terminal into an extensible toolbox. It comes with a plugin system—install packages to add commands, or write your own in minutes. Looking at: [https://c-api-plugin.hellowyq.com/](https://c-api-plugin.hellowyq.com/)
 
 ### Why use it?
 
@@ -173,7 +173,7 @@ MIT
 
 ### 这是什么？
 
-Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。扩展插件市场:[Command+ API Plugins Marketplace](https://commandapi.pages.dev/)
+Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。扩展插件市场:[Command+ API 插件市场](https://c-api-plugin.hellowyq.com/)
 
 ### 为什么用它？
 
