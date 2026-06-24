@@ -1,22 +1,29 @@
-<img title="" src="./icon.svg" alt="" data-align="left" width="242">
+<img title="" src="./icon.svg" alt="" data-align="left" width="195">
 
-# Command+ API
+# Command+ API <img title="" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" width="92">
 
-> **v1.0.4 | Turn your terminal into an extensible developer toolbox / 把你的终端变成可扩展的开发工具箱**
-
-> [!WARNING]
-> **插件与主程序运行在同一个 Node.js 进程中。** 虽然 `ctx` 对象提供了上下文隔离，但它并非严格的安全沙箱。加载不可信的第三方插件可能存在安全风险（如任意代码执行）。请仅安装来自可信来源的插件，除非你确保此插件安全。<br />
-> **Plugins run in the same Node.js process.** While the `ctx` object provides context isolation, it is NOT a strict security sandbox. Loading untrusted third-party plugins may pose security risks (e.g., arbitrary code execution). Only install plugins from trusted sources.
-
-> **[License / 协议]** MIT
+### v1.1.0,<br /> A lightweight Node.js command-line framework with a <u>built-in plugin system</u>, <u>internationalization support</u>, and <u>API call capabilities</u>.
 
 ---
 
-### **Language / 语言**
+**Docs / 文档主站 ：** http://wiki.hellowyq.com/docs/Command_API/install
+**Docs2 / 文档备用站：** http://wangyqwiki.vercel.app/docs/Command_API/install
+**Developer's Manual / 开发者手册：** https://wiki.hellowyq.com/docs/Command_API/02-developer
+**Plugins Marketplace / 插件市场：** https://c-api-plugin.hellowyq.com/
 
-This document is available in multiple languages. <br />You can select a language and switch between them.
+---
 
-| [🇺🇸 English](#english) | [🇨🇳 简体中文](#简体中文) |
+> [!WARNING]
+>
+> **Plugins run in the same Node.js process.** While the `ctx` object provides context isolation, it is NOT a strict security sandbox. Loading untrusted third-party plugins may pose security risks (e.g., arbitrary code execution). So, it's recommended that you download reviewed plugins from the plugin website.
+>
+> **插件与主程序运行在同一个 Node.js 进程中。** 虽然 `ctx` 对象提供了上下文隔离，但它并非严格的安全沙箱。加载不可信的第三方插件可能存在安全风险（如任意代码执行）。因此，建议您从插件网站下载审核过的插件。
+
+---
+
+## **Language / 语言**
+
+| [🇺🇸 English](#english) | [🇨🇳 简体中文](#%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87) |
 
 ---
 
@@ -24,36 +31,35 @@ This document is available in multiple languages. <br />You can select a languag
 
 ## 🇺🇸 English
 
-### What is it?
+### What is this?
 
-Command+ API is a cross-platform CLI framework that turns your terminal into an extensible toolbox. It comes with a plugin system—install packages to add commands, or write your own in minutes. Looking at: [https://c-api-plugin.hellowyq.com/](https://c-api-plugin.hellowyq.com/)
+Command+ API is a cross-platform command-line framework that adds a single extensible command to your terminal. It features a built-in plugin system — install plugin packages to add new commands, or easily write your own extension in just a few minutes. Check out the plugin marketplace: [Command+ API Plugin Marketplace](https://c-api-plugin.hellowyq.com/)
 
 ### Why use it?
 
-* **One command, infinite possibilities** — All features share the `c` prefix.
-* **Plugin ecosystem** — Just drop `.js` files into the `lib/` folder to add new commands.
-* **API-first design** — Some commands support JSON output for easy script parsing. Errors are routed to `stderr`, making it highly convenient for other programs to invoke.
-* **Multilingual support** — The core program includes built-in support for English, Chinese, Spanish, and Russian. Plugin packages can further extend this.
-* **Extremely lightweight** — The core code + `node_modules` is only about 1.5MB (uncompiled).
-* **MIT License** — Free for commercial use.
+* **One command, unlimited possibilities** — Add as many commands as you like via the plugin system. All plugins are invoked through `c xxx`.
+* **Plugin ecosystem** — Drop a `.js` file into `lib/` to add a new command (as long as the plugin follows the required format).
+* **Multi-language support** — Built-in support for Chinese, English, Spanish, and Russian, with more languages coming in the future.
+* **Super lightweight** — The core code + `node_modules` is only 1.5MB (uncompiled).
+* **MIT licensed** — Free for commercial use. You can even modify the source code.
 
 ### Installation
 
-#### (Method 1) Direct Installation (Run after extraction)
+#### (Method 1) Direct install — unzip and run
 
-Download the pre-compiled package for your platform from [Releases](https://github.com/GlassShadowX-studio/Command_plus_API/releases/):
+Download the pre-built package for your platform from [Releases](https://github.com/GlassShadowX-studio/Command_plus_API/releases/):
 
 * **Windows:** `c-win-x64.zip`
 * **Linux:** `c-linux-x64.zip`
 * **macOS:** `c-macos-x64.zip`
 
-*Note: Release packages are automatically compiled via GitHub Actions. If you find they cannot run, you can try compiling them yourself (This is the author's first time using GitHub Actions, thank you for your understanding).*
+*Release packages are auto-built by GitHub Actions. If you encounter issues, try building from source (this is the author's first time using GitHub Actions — thanks for your understanding).*
 
-After extraction, please refer to the "Add to System PATH" section below.
+After extracting, see the section below on how to add the executable to your PATH.
 
-#### (Method 2) Compile from Source (Recommended)
+#### (Method 2) Build from source (recommended)
 
-**Requirements:** Node.js 16+ and npm
+**Prerequisites:** Node.js 16+ and npm
 
 ```bash
 # Clone the repository
@@ -63,80 +69,87 @@ cd Command_plus_API
 # Install dependencies
 npm install
 
-# Compile the executable (using 'pkg')
-npm run build:win    # For Windows
-npm run build:mac    # For macOS
-npm run build:linux  # For Linux
+# Build executable (packaged with 'pkg')
+npm run build:win    # Windows
+npm run build:mac    # macOS
+npm run build:linux  # Linux
 ```
 
 The application will be generated in the `dist` folder.
-*Note: The `lib/` folder is required at runtime. After compilation, please copy the `lib/` folder into the `dist/` folder. The `lib/` folder must be distributed alongside the executable.*
+*Note: The `lib/` folder is required at runtime. After building, copy the `lib/` folder into `dist/`, and ensure the `lib/` folder is placed alongside the executable.*
 
-### Add to System PATH
+### Install to system PATH
 
-**Windows (Run Command Prompt as Administrator):**
+**Windows (run Command Prompt as Administrator):**
 
 ```cmd
-:: Create a directory (e.g., install to C:\Program Files (x86)\command+ API)
+:: Create the installation directory (e.g., C:\Program Files (x86)\command+ API)
 mkdir "C:\Program Files (x86)\command+ API"
 
 :: Copy files
 copy c.exe "C:\Program Files (x86)\command+ API\"
 xcopy lib "C:\Program Files (x86)\command+ API\lib\" /E
 
-:: Add to PATH (Takes effect permanently)
+:: Add to PATH (permanent)
 setx PATH "%PATH%;C:\Program Files (x86)\command+ API"
 ```
 
-*You need to restart your command line for the changes to take effect.*
+*Restart your terminal for the changes to take effect.*
 
 **Linux / macOS:**
 
 ```bash
-# Step 1: Create a directory (e.g., ~/tools/cmd-plus)
+# Step 1: Create the installation directory (e.g., ~/tools/cmd-plus)
 mkdir -p ~/tools/cmd-plus
 
-# Step 2: Copy files (assuming you're in the extracted/compiled directory)
+# Step 2: Copy files (from your extracted or built directory)
 cp c ~/tools/cmd-plus/
 cp -r lib ~/tools/cmd-plus/
 
-# Step 3: Make the executable file have execute permissions (Important!)
+# Step 3: Grant execute permission (important!)
 chmod +x ~/tools/cmd-plus/c
 
-# Step 4: Add to PATH (Temporary - for current session only)
-export PATH="$PATH:~/tools/cmd-plus"
+# Step 4: Add to PATH (permanent) — append the following line to ~/.bashrc or ~/.zshrc
+echo 'export PATH="$PATH:$HOME/tools/cmd-plus"' >> ~/.bashrc
 
-# Step 5: Add to PATH (Permanent) - Add the following line to ~/.bashrc or ~/.zshrc
-echo 'export PATH="$PATH:/home/$USER/tools/cmd-plus"' >> ~/.bashrc
-
-# Step 6: Reload shell configuration
+# Step 5: Reload configuration
 source ~/.bashrc
-
 ```
 
-### Verify Installation
+### Verify installation
+
+**Windows:**
 
 ```bash
-# Check if the path is correctly set
+# Running 'c' should display the help information
+c
+```
+
+**Linux / macOS:**
+
+```bash
+# Check that PATH is set correctly
 echo $PATH
 
-# Verify the file exists and has execute permissions
+# Verify the file exists and has execute permission
 ls -la ~/tools/cmd-plus/c
 
-c --help
+# Running 'c' should display the help information
+c
 ```
 
-### Quick Start
+### Quick start
 
 ```bash
-c --help                    # View help
-c config language en        # Switch to English
+c config language zh        # Switch to Chinese
 c manage list               # List installed plugin packages
-c manage enable <name>      # Enable a package
-c manage disable <name>     # Disable a package
+c ip                        # Get your IP address
+c tree                      # Display directory tree (auto-filters folders like node_modules)
+c manage install fileui     # Install a plugin from the marketplace (using 'fileui' as an example)
+c game fileui               # Run the fileui plugin (a terminal file viewer)
 ```
 
-### Write Your First Plugin
+### [Advanced] Writing your first plugin
 
 Create `lib/hello.js`:
 
@@ -156,33 +169,21 @@ Run it:
 c hello
 ```
 
-### Documentation (More detailed tutorials)
-
-📖 **Main Site:** https://wiki.hellowyq.com/docs/Command_API/install
-📖 **Backup Site:** https://wangyqwiki.vercel.app/docs/Command_API/install
-
-### License
-
-MIT
-
----
-
 <a id="简体中文"></a>
 
 ## 🇨🇳 简体中文
 
 ### 这是什么？
 
-Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。扩展插件市场:[Command+ API 插件市场](https://c-api-plugin.hellowyq.com/)
+Command+ API 是一个跨平台命令行框架，它为你的终端加入了一个可扩展的命令。它内置插件系统，安装插件包即可添加命令，甚至可以自己用几分钟很容易地写一个扩展。当然，你可以来扩展插件市场看一看:[Command+ API 插件市场](https://c-api-plugin.hellowyq.com/)
 
 ### 为什么用它？
 
-* **一个命令，无限内容** —— 所有功能共用 `c` 前缀。
-* **插件生态** —— 把 `.js` 文件放进 `lib/`，即可添加新命令。
-* **API 优先设计** —— 部分命令支持输出 JSON 供脚本解析，错误用 `stderr`，其他程序调用本软件方便。
-* **多语言支持** —— 主程序内置中、英、西、俄四语言，插件包可以继续扩展。
+* **一个命令，无限内容** —— 通过插件系统，你可添加许多命令，所有插件可通过 `c xxx`调用
+* **插件生态** —— 把 `.js` 文件放进 `lib/`，即可添加新命令。(前提是插件符合要求)
+* **多语言支持** —— 主程序内置中、英、西、俄四语言，未来会继续扩展新的语言支持。
 * **十分轻量** —— 核心代码+`node_modules`仅1.5MB(未编译)。
-* **MIT协议** —— 你可以免费商业使用本软件。
+* **MIT协议** —— 你可以免费商业使用本软件，甚至可以修改它。
 
 ### 安装软件
 
@@ -219,7 +220,7 @@ npm run build:linux  # linux
 之后会在 `dist` 文件夹生成应用。
 *注意：运行时需要 `lib/` 文件夹，编译好后请将 `lib/` 文件夹复制到 `dist/` 文件夹，并且 `lib/` 文件夹需要和可执行文件放在一起。*
 
-### 安装到系统 PATH
+### 安装软件到系统 PATH
 
 **Windows（以管理员身份运行命令提示符）：**
 
@@ -250,42 +251,47 @@ cp -r lib ~/tools/cmd-plus/
 # 第3步：赋予可执行权限（重要！）
 chmod +x ~/tools/cmd-plus/c
 
-# 第4步：添加到 PATH（临时生效 - 仅当前会话）
-export PATH="$PATH:~/tools/cmd-plus"
-
-# 第5步：添加到 PATH（永久生效）- 将下面这行加入 ~/.bashrc 或 ~/.zshrc
+# 第4步：添加到 PATH（永久生效）- 将下面这行加入 ~/.bashrc 或 ~/.zshrc
 echo 'export PATH="$PATH:/home/$USER/tools/cmd-plus"' >> ~/.bashrc
 
-# 第6步：重新加载配置
+# 第5步：重新加载配置
 source ~/.bashrc
-
-
 ```
 
 ### 验证安装：
 
-```bash
+**Windows：**
 
+```bash
+# 在本软件输入"C"会直接弹出帮助内容
+c
+```
+
+**Linux / macOS：**
+
+```bash
 # 检查路径是否正确设置
 echo $PATH
 
 # 验证文件是否存在且具有可执行权限
 ls -la ~/tools/cmd-plus/c
 
-c --help
+# 在本软件输入"C"会直接弹出帮助内容
+c
 ```
 
-### 快速上手
+### 快速上手:
 
 ```bash
-c --help                    # 查看帮助
-c config language en        # 切换为英文
+c config language zh        # 切换为中文
 c manage list               # 列出已安装的插件包
-c manage enable <名称>      # 启用一个包
-c manage disable <名称>     # 禁用一个包
+c ip                        # 获取你的IP地址
+c tree                      # 树状列举文件夹内容(自动过滤如node_modules等文件夹)
+c manage install fileui     # 从插件市场安装插件(这里以"fileui"插件为例)
+c game fileui               # 运行插件fileui(此插件是一个终端文件查看器)
 ```
 
-### 编写第一个插件
+### 【进阶】编写第一个插件
 
 创建 `lib/hello.js`：
 
@@ -305,11 +311,11 @@ module.exports = {
 c hello
 ```
 
-### 软件文档(更详细的教程)
+---
 
-📖 **主站：** https://wiki.hellowyq.com/docs/Command_API/install
-📖 **备用站：** https://wangyqwiki.vercel.app/docs/Command_API/install
+## 其他详细信息 / Other details :
 
-### License/协议
-
-MIT
+**文档主站 / Docs：** http://wiki.hellowyq.com/docs/Command_API/install
+**文档备用站 / Docs：** http://wangyqwiki.vercel.app/docs/Command_API/install
+**开发者手册 / Developer's Manual：** https://wiki.hellowyq.com/docs/Command_API/02-developer
+**插件市场 / Plugins Marketplace：** https://c-api-plugin.hellowyq.com/

@@ -6,7 +6,7 @@ const os = require('os');
 // ==========================================
 // 全局统一版本号 (修改此处即可更新全软件版本)
 // ==========================================
-const VERSION = '1.0.4';
+const VERSION = '1.1.0';
 
 const state = { lang: 'en' };
 const CONFIG_DIR = path.join(os.homedir(), '.cmdplus');
@@ -39,7 +39,9 @@ const CoreI18N = {
     about_env_info: '--- Software & Environment Info ---',
     about_name: 'Name', about_version: 'Version', about_nodejs: 'Node.js',
     about_platform: 'Platform', about_base_path: 'Base Path', about_executable: 'Executable',
-    about_docs: 'Documentation', about_open_docs_hint: '(Use "c about docs" to open in browser)'
+    about_docs: 'Documentation', about_open_docs_hint: '(Use "c about docs" to open in browser)',
+    error_storage_read: '[CStorage] Failed to read storage for {file}: {msg}',
+    error_storage_write: '[CStorage] Failed to write storage for {file}: {msg}'
   },
   zh: {
     help_title: 'Command+ API v{version}', help_usage: '用法：c <command> [arguments]',
@@ -64,7 +66,9 @@ const CoreI18N = {
     about_env_info: '--- 软件与环境信息 ---',
     about_name: '名称', about_version: '版本', about_nodejs: 'Node.js',
     about_platform: '平台', about_base_path: '基础路径', about_executable: '可执行文件',
-    about_docs: '官方文档', about_open_docs_hint: '(使用 "c about docs" 在浏览器中打开)'
+    about_docs: '官方文档', about_open_docs_hint: '(使用 "c about docs" 在浏览器中打开)',
+    error_storage_read: '[CStorage] 读取 {file} 的存储失败: {msg}',
+    error_storage_write: '[CStorage] 写入 {file} 的存储失败: {msg}'
   },
   es: {
     help_title: 'Command+ API v{version}', help_usage: 'Uso: c <comando> [argumentos]',
@@ -89,7 +93,9 @@ const CoreI18N = {
     about_env_info: '--- Información del Software y Entorno ---',
     about_name: 'Nombre', about_version: 'Versión', about_nodejs: 'Node.js',
     about_platform: 'Plataforma', about_base_path: 'Ruta Base', about_executable: 'Ejecutable',
-    about_docs: 'Documentación', about_open_docs_hint: '(Usa "c about docs" para abrir en el navegador)'
+    about_docs: 'Documentación', about_open_docs_hint: '(Usa "c about docs" para abrir en el navegador)',
+    error_storage_read: '[CStorage] Error al leer almacenamiento de {file}: {msg}',
+    error_storage_write: '[CStorage] Error al escribir almacenamiento de {file}: {msg}'
   },
   ru: {
     help_title: 'Command+ API v{version}', help_usage: 'Использование: c <команда> [аргументы]',
@@ -114,7 +120,9 @@ const CoreI18N = {
     about_env_info: '--- Информация о ПО и среде ---',
     about_name: 'Имя', about_version: 'Версия', about_nodejs: 'Node.js',
     about_platform: 'Платформа', about_base_path: 'Базовый путь', about_executable: 'Исполняемый файл',
-    about_docs: 'Документация', about_open_docs_hint: '(Используйте "c about docs", чтобы открыть в браузере)'
+    about_docs: 'Документация', about_open_docs_hint: '(Используйте "c about docs", чтобы открыть в браузере)',
+    error_storage_read: '[CStorage] Ошибка чтения хранилища для {file}: {msg}',
+    error_storage_write: '[CStorage] Ошибка записи хранилища для {file}: {msg}'
   }
 };
 
@@ -153,6 +161,71 @@ function padEnd(str, len) {
   let width = 0;
   for (let char of str) width += char.match(/[\u4e00-\u9fa5\u3040-\u309f\u30a0-\u30ff]/) ? 2 : 1;
   return str + ' '.repeat(Math.max(0, len - width));
+}
+
+// ==========================================
+// CStorage 独立存储系统工厂
+// ==========================================
+function createCStorage(basePath, sourceFile) {
+    const storageDir = path.join(basePath, 'CStorage', sourceFile);
+    const storageFile = path.join(storageDir, 'main.json');
+
+    if (!fs.existsSync(storageDir)) {
+        try { fs.mkdirSync(storageDir, { recursive: true }); } catch (e) {}
+    }
+
+    const loadData = () => {
+        try {
+            if (fs.existsSync(storageFile)) {
+                return JSON.parse(fs.readFileSync(storageFile, 'utf-8'));
+            }
+        } catch (e) {
+            console.error(coreT('error_storage_read', { file: sourceFile, msg: e.message }));
+        }
+        return {};
+    };
+
+    const saveData = (data) => {
+        try {
+            fs.writeFileSync(storageFile, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (e) {
+            console.error(coreT('error_storage_write', { file: sourceFile, msg: e.message }));
+        }
+    };
+
+    return {
+        getItem(key) {
+            const data = loadData();
+            return data.hasOwnProperty(key) ? data[key] : null;
+        },
+        setItem(key, value) {
+            const data = loadData();
+            data[key] = value;
+            saveData(data);
+        },
+        removeItem(key) {
+            const data = loadData();
+            if (data.hasOwnProperty(key)) {
+                delete data[key];
+                saveData(data);
+            }
+        },
+        clear() {
+            saveData({});
+        },
+        getAll() {
+            return loadData();
+        },
+        hasItem(key) {
+            return loadData().hasOwnProperty(key);
+        },
+        get keys() {
+            return Object.keys(loadData());
+        },
+        get length() {
+            return Object.keys(loadData()).length;
+        }
+    };
 }
 
 // ==========================================
@@ -255,7 +328,10 @@ class CommandPlus {
     const plugin = this.commands[cmdName];
     if (plugin) {
       try {
-        await plugin.run(args, this.ctx);
+        const pluginCtx = Object.create(this.ctx);
+        pluginCtx.storage = createCStorage(this.ctx.basePath, plugin._sourceFile);
+        pluginCtx.CStorage = pluginCtx.storage; // 提供 CStorage 命名别名
+        await plugin.run(args, pluginCtx); 
       } catch (e) {
         console.error(coreT('error_plugin_run', { cmd: cmdName, msg: e.message || e }));
         process.exit(1);
